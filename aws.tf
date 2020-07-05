@@ -53,7 +53,7 @@ resource "aws_instance" "build_instance" {
   subnet_id = "${var.subnet_id}"
   user_data = <<EOF
 #!/bin/bash
-sudo apt update && sudo apt install openjdk-8-jdk maven
+sudo apt update && sudo apt install -y openjdk-8-jdk maven awscli
 git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
 cd boxfuse-sample-java-war-hello && mvn package
 export AWS_ACCESS_KEY_ID=<...placeholder...>
@@ -72,13 +72,13 @@ resource "aws_instance" "prod_instance" {
   subnet_id = "${var.subnet_id}"
   user_data = <<EOF
 #!/bin/bash
-sudo apt update && sudo apt install openjdk-8-jdk tomcat8
+sudo apt update && sudo apt install -y openjdk-8-jdk tomcat8 awscli
 export AWS_ACCESS_KEY_ID=<...placeholder...>
 export AWS_SECRET_ACCESS_KEY=<...placeholder...>
 export AWS_DEFAULT_REGION=us-east-1
 aws s3 cp s3://mybucket.ru/hello-1.0.war /tmp/hello-1.0.war
 sudo mv /tmp/hello-1.0.war /var/lib/tomcat8/webapps/hello-1.0.war
-sudo systemctl enable tomcat8 --now
+sudo systemctl restart tomcat8
 EOF
   
 }
