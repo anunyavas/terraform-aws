@@ -51,6 +51,9 @@ resource "aws_instance" "build_instance" {
   key_name = "${aws_key_pair.amazon.key_name}"
   vpc_security_group_ids = ["${aws_security_group.allow_app_traffic.id}"]
   subnet_id = "${var.subnet_id}"
+  provisioner "local-exec" {
+    command = "echo The server's IP address is ${self.private_ip}"
+  }
 }
 
 resource "aws_instance" "prod_instance" {
@@ -59,6 +62,9 @@ resource "aws_instance" "prod_instance" {
   key_name = "${aws_key_pair.amazon.key_name}"
   vpc_security_group_ids = ["${aws_security_group.allow_app_traffic.id}"]
   subnet_id = "${var.subnet_id}"
+  provisioner "local-exec" {
+    command = "echo The server's IP address is ${self.private_ip}"
+  }
 }
 
 
